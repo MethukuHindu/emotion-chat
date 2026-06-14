@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmotiChat - Privacy-First Emotion Messaging</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="[fonts.googleapis.com](https://fonts.googleapis.com)">
+    <link rel="preconnect" href="[fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="login-container">
+                <div class="logo">
+                    <span class="logo-emoji">💬</span>
+                    <h1>EmotiChat</h1>
+                </div>
+                <p class="tagline">Privacy-first messaging with emotion awareness</p>
+                
+                <form id="login-form">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="username-input" 
+                            placeholder="Enter your name"
+                            maxlength="20"
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Join Chat
+                    </button>
+                </form>
+                
+                <div class="privacy-notice">
+                    <span class="privacy-icon">🔒</span>
+                    <p>Your camera is used locally for emotion detection. No images are ever sent to the server.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Screen -->
+        <div id="chat-screen" class="screen">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-left">
+                    <span class="logo-small">💬</span>
+                    <h2>EmotiChat</h2>
+                </div>
+                <div class="header-center">
+                    <div id="online-users" class="online-users">
+                        <span class="online-dot"></span>
+                        <span id="user-count">0</span> online
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button id="camera-toggle" class="btn btn-icon" title="Toggle Camera">
+                        📷
+                    </button>
+                    <button id="logout-btn" class="btn btn-icon" title="Leave Chat">
+                        🚪
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Chat Area -->
+            <main class="chat-main">
+                <!-- Messages Container -->
+                <div id="messages-container" class="messages-container">
+                    <div id="messages-list" class="messages-list">
+                        <!-- Messages will be inserted here -->
+                    </div>
+                    <div id="typing-indicator" class="typing-indicator hidden">
+                        <span class="typing-dots">
+                            <span></span><span></span><span></span>
+                        </span>
+                        <span class="typing-text">Someone is typing...</span>
+                    </div>
+                </div>
+
+                <!-- Camera Preview Sidebar -->
+                <aside id="camera-sidebar" class="camera-sidebar">
+                    <div class="camera-header">
+                        <h3>Emotion Detection</h3>
+                        <button id="close-camera" class="btn btn-icon-small">✕</button>
+                    </div>
+                    <div class="camera-preview-container">
+                        <video id="camera-preview" autoplay playsinline muted></video>
+                        <canvas id="camera-canvas" class="hidden"></canvas>
+                        <div id="camera-overlay" class="camera-overlay">
+                            <span id="current-emotion" class="current-emotion">😐</span>
+                        </div>
+                    </div>
+                    <div class="emotion-status">
+                        <span id="emotion-label">Neutral</span>
+                        <span id="emotion-confidence" class="confidence">--</span>
+                    </div>
+                    <div class="privacy-badge">
+                        <span>🔒</span> Processing locally
+                    </div>
+                </aside>
+            </main>
+
+            <!-- Message Input Area -->
+            <footer class="chat-footer">
+                <div class="input-container">
+                    <div id="emotion-badge" class="emotion-badge" title="Current emotion">
+                        <span id="input-emotion">😐</span>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="message-input" 
+                        placeholder="Type a message..."
+                        maxlength="1000"
+                        autocomplete="off"
+                    >
+                    <button id="send-btn" class="btn btn-send" disabled>
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Camera Permission Modal -->
+        <div id="camera-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>📷 Camera Access</h3>
+                <p>EmotiChat needs camera access to detect your emotions while chatting.</p>
+                <p class="privacy-note">
+                    <strong>Privacy guarantee:</strong> Your camera feed is processed 
+                    entirely on your device. Only emotion labels (like "happy" or "neutral") 
+                    are sent with your messages—never images or video.
+                </p>
+                <div class="modal-actions">
+                    <button id="deny-camera" class="btn btn-secondary">Skip for now</button>
+                    <button id="allow-camera" class="btn btn-primary">Enable Camera</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <!-- Socket.IO Client -->
+    <script src="[cdnjs.cloudflare.com](https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js)"></script>
+    
+    <!-- Application Scripts -->
+    <script src="/js/emotionBridge.js"></script>
+    <script src="/js/camera.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
