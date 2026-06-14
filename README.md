@@ -10,7 +10,6 @@ A real-time chat application that detects facial emotions locally before sending
 
 ## ✨ Features
 
-- WhatsApp-style chat interface
 - Real-time messaging with Socket.IO
 - Local facial emotion detection (7 emotions)
 - Emotion displayed with each message
